@@ -1,17 +1,24 @@
-from aiogram import Bot
-from aiogram.exceptions import TelegramBadRequest
-from aiogram.fsm.context import FSMContext
 from aiogram.types import Message, CallbackQuery
 from typing import Union
 
-from keyboards.inline_keyboard import main_menu_kb
+from keyboards.inline_keyboard import main_menu_kb, home_kb
+
+
+async def handle_start_command(context: Union[Message, CallbackQuery]):
+    await show_main_menu(context)
 
 async def show_main_menu(context: Union[Message, CallbackQuery]):
-    await context.answer()
-    await context.message.answer(
-        f"Привет, {context.from_user.full_name}!\nМеню:",
-        reply_markup=await main_menu_kb()
-    )
-    
-async def handle_start_command(user_id: int, context: Union[Message, CallbackQuery], state: FSMContext, bot: Bot = None):
-    await show_main_menu(context)
+    text = f"Привет, {context.from_user.full_name}!\nМеню:"
+    if isinstance(context, CallbackQuery):
+        await context.answer()
+        await context.message.answer(text, reply_markup=await main_menu_kb())
+        return
+    await context.answer(text, reply_markup=await main_menu_kb())
+
+async def show_about(context: Union[Message, CallbackQuery]):
+    text = "Разработчик: t.me/renamq\nКоманда: Techniki"
+    if isinstance(context, CallbackQuery):
+        await context.answer()
+        await context.message.answer(text, reply_markup=await home_kb())
+        return
+    await context.answer(text, reply_markup=await home_kb())

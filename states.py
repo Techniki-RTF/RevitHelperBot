@@ -1,4 +1,4 @@
 from aiogram.fsm.state import StatesGroup, State
 
-class UserStates(StatesGroup):
-    waiting = State()
+class ConsultationStates(StatesGroup):
+    in_progress = State()
