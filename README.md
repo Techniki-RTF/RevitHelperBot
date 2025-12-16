@@ -23,12 +23,21 @@
 
 ```dotenv
 TOKEN=123456:ABCDEF_your_telegram_bot_token # t.me/BotFather
+ADMINS=123456789 # telegram ids
+
+DB_USER=admin
+DB_PASS=password
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=revitbot_db
+
+PGADMIN_EMAIL=admin@admin.com
+PGADMIN_PASSWORD=admin
 ```
-### Установите зависимости и запустите бота
+### Запустите бота через Docker Compose
 
 ```bash
-pip install -r requirements.txt
-python aiogram_run.py
+docker compose up --build
 ```
 
 ## Как пользоваться
