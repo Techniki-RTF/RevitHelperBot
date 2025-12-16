@@ -1,6 +1,9 @@
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
+from create_bot import admins
+
+
 # TODO: why async?
 
 async def main_menu_kb():
@@ -23,19 +26,21 @@ async def consult_step_kb():
     return InlineKeyboardMarkup(inline_keyboard=inline_kb_list)
 
 
-async def wiki_open_kb():
+async def wiki_open_kb(user_id: int):
     inline_kb_list = [
-        [InlineKeyboardButton(text="📄 Добавить статью", callback_data="wiki_add_page")],
         [InlineKeyboardButton(text="👀️ Посмотреть добавленные статьи", callback_data="wiki_show")],
         [InlineKeyboardButton(text="🏠 В главное меню", callback_data="home")],
     ]
+    if user_id in admins:
+        inline_kb_list.insert(1,
+[InlineKeyboardButton(text="📄 Добавить статью", callback_data="wiki_add_page")])
     return InlineKeyboardMarkup(inline_keyboard=inline_kb_list)
 
 
 async def wiki_approval_kb():
     inline_kb_list = [
         [InlineKeyboardButton(text="✅ Добавить", callback_data="wiki_add_page_approve")],
-        [InlineKeyboardButton(text="❌ Отклонить", callback_data="wiki_add_page_decline")],
+        [InlineKeyboardButton(text="❌ Отменить", callback_data="wiki_add_page_decline")],
     ]
     return InlineKeyboardMarkup(inline_keyboard=inline_kb_list)
 

@@ -5,16 +5,20 @@ from typing import Union
 from keyboards.inline_keyboard import home_kb, wiki_open_kb, wiki_approval_kb, wiki_show_kb, wiki_show_page_kb, wiki_show_empty_db_kb
 from states import WikiStates
 
-from create_bot import db
+from create_bot import db, admins
+from utils.permissions import ensure_admin
+
 
 # TODO: use certain types instead of Union[Message, CallbackQuery] to reduce code implicity (?)
 
 async def wiki_open(context: Union[Message, CallbackQuery], state: FSMContext):
     await context.answer()
-    await context.message.answer("Меню управления статьями:", reply_markup=await wiki_open_kb())
+    await context.message.answer("Меню управления статьями:", reply_markup=await wiki_open_kb(context.from_user.id))
 
 
 async def wiki_add_page(context: Union[Message, CallbackQuery], state: FSMContext):
+    if not await ensure_admin(context): return
+
     await context.answer()
     await context.message.answer("✒️ Отправьте название статьи. /cancel для отмены")
 
@@ -25,6 +29,8 @@ async def wiki_add_page(context: Union[Message, CallbackQuery], state: FSMContex
 async def wiki_add_page_title_got(context: Union[Message, CallbackQuery], state: FSMContext):
     # TODO: handle empty text (e.g sticker, video, photo, ..)
     # TODO: don't allow multiline title (?)
+    if not await ensure_admin(context): return
+
     title = context.text
 
     await context.answer(f'📄 Выбранное название: "{title}"')
@@ -35,6 +41,7 @@ async def wiki_add_page_title_got(context: Union[Message, CallbackQuery], state:
 
 
 async def wiki_add_page_content_got(context: Union[Message, CallbackQuery], state: FSMContext):
+    if not await ensure_admin(context): return
     data = await state.get_data()
     title = data["title"]
     # TODO: handle empty text (e.g sticker, video, photo, ..)
@@ -46,6 +53,7 @@ async def wiki_add_page_content_got(context: Union[Message, CallbackQuery], stat
 
 
 async def wiki_add_page_approve(context: Union[Message, CallbackQuery], state: FSMContext, approved: bool):
+    if not await ensure_admin(context): return
     data = await state.get_data()
     title, content = (data["title"], data["content"])
 
@@ -87,6 +95,8 @@ async def wiki_show_page(context: Union[Message, CallbackQuery], state: FSMConte
 
 
 async def wiki_remove_page(context: Union[Message, CallbackQuery], state: FSMContext):
+    if not await ensure_admin(context): return
+
     data = await state.get_data()
     page_id = data["page_id"]
 
