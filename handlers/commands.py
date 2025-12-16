@@ -20,4 +20,4 @@ async def cmd_about(message: Message):
 async def cmd_cancel(message: Message, state: FSMContext):
     await state.clear()
     await message.answer("❌ Операция отменена")
-    await cmd_start(message)
+    await cmd_start(message, state)
