@@ -16,7 +16,7 @@ async def show_main_menu(context: Union[Message, CallbackQuery]):
     await context.answer(text, reply_markup=await main_menu_kb())
 
 async def show_about(context: Union[Message, CallbackQuery]):
-    text = "Разработчик: t.me/renamq\nКоманда: Techniki"
+    text = "Разработчики:\nt.me/renamq\nt.me/Blueberry_Roulette\n\nКоманда: Techniki"
     if isinstance(context, CallbackQuery):
         await context.answer()
         await context.message.answer(text, reply_markup=await home_kb())
