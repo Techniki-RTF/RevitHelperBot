@@ -1,0 +1,1 @@
+worker: python aiogram_run.py
