@@ -53,6 +53,7 @@ async def wiki_add_page_approve(context: Union[Message, CallbackQuery], state: F
         # TODO: get the result (e.g updated, created, ..); error handling
         await db.add_page(title, content)
 
+    await context.answer()
     await state.clear()
     text = "✅ Статья добавлена" if approved else "❌ Статья отклонена"
     await context.message.answer(text, reply_markup=await home_kb())
