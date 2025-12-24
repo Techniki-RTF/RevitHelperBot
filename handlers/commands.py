@@ -15,9 +15,3 @@ async def cmd_start(message: Message, state: FSMContext):
 @start_cmd_router.message(Command("about"))
 async def cmd_about(message: Message):
     await show_about(message)
-
-@start_cmd_router.message(Command("cancel"))
-async def cmd_cancel(message: Message, state: FSMContext):
-    await state.clear()
-    await message.answer("❌ Операция отменена")
-    await cmd_start(message, state)

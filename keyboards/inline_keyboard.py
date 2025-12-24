@@ -78,3 +78,7 @@ def home_kb():
 def back_kb(callback: str):
     inline_kb_list = [[InlineKeyboardButton(text="⬅️ Назад", callback_data=f"{callback}")]]
     return InlineKeyboardMarkup(inline_keyboard=inline_kb_list)
+
+def cancel_kb():
+    inline_kb_list = [[InlineKeyboardButton(text="❌ Отмена", callback_data="cancel")]]
+    return InlineKeyboardMarkup(inline_keyboard=inline_kb_list)

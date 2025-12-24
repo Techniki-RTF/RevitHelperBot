@@ -17,6 +17,10 @@ start_callback_router = Router()
 async def home(callback: CallbackQuery):
     await show_main_menu(callback)
 
+@start_callback_router.callback_query(F.data == "cancel")
+async def cancel(callback: CallbackQuery):
+    await show_main_menu(callback)
+
 @start_callback_router.callback_query(F.data == "start_consult")
 async def start_consult(callback: CallbackQuery, state: FSMContext):
     await start_consultation(callback, state)

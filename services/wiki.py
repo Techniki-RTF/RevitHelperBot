@@ -2,7 +2,8 @@ from aiogram.fsm.context import FSMContext
 from aiogram.types import Message, CallbackQuery
 from typing import Union
 
-from keyboards.inline_keyboard import home_kb, wiki_open_kb, wiki_approval_kb, wiki_show_kb, wiki_show_page_kb, wiki_show_empty_db_kb
+from keyboards.inline_keyboard import home_kb, wiki_open_kb, wiki_approval_kb, wiki_show_kb, wiki_show_page_kb, \
+    wiki_show_empty_db_kb, cancel_kb
 from states import WikiStates
 
 from create_bot import db
@@ -11,7 +12,7 @@ from utils.permissions import ensure_admin
 
 # TODO: use certain types instead of Union[Message, CallbackQuery] to reduce code implicity (?)
 
-async def wiki_open(context: Union[Message, CallbackQuery], state: FSMContext):
+async def wiki_open(context: Union[Message, CallbackQuery]):
     await context.answer()
     await context.message.answer("Меню управления статьями:", reply_markup=wiki_open_kb(context.from_user.id))
 
@@ -20,7 +21,7 @@ async def wiki_add_page(context: Union[Message, CallbackQuery], state: FSMContex
     if not await ensure_admin(context): return
 
     await context.answer()
-    await context.message.answer("✒️ Отправьте название статьи. /cancel для отмены")
+    await context.message.answer("✒️ Отправьте название статьи", reply_markup=cancel_kb())
 
     await state.set_state(WikiStates.waiting_for_title)
     await state.update_data(title="", content="")
@@ -34,7 +35,7 @@ async def wiki_add_page_title_got(context: Union[Message, CallbackQuery], state:
     title = context.text
 
     await context.answer(f'📄 Выбранное название: "{title}"')
-    await context.answer("✒️ Отправьте содержимое статьи. /cancel для отмены")
+    await context.answer("✒️ Отправьте содержимое статьи", reply_markup=cancel_kb())
 
     await state.set_state(WikiStates.waiting_for_content)
     await state.update_data(title=title)
