@@ -14,7 +14,6 @@ async def show_main_menu(context: Union[Message, CallbackQuery]):
         await context.answer()
         await context.message.answer(text, reply_markup=main_menu_kb())
         return
-    await context.answer(text, reply_markup=await main_menu_kb())
     await context.answer(text, reply_markup=main_menu_kb())
 
 

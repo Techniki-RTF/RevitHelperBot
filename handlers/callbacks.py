@@ -26,8 +26,8 @@ async def start_consult(callback: CallbackQuery, state: FSMContext):
     await start_consultation(callback, state)
 
 @start_callback_router.callback_query(F.data == "wiki_open")
-async def wiki_open_callback(callback: CallbackQuery, state: FSMContext):
-    await wiki_open(callback, state)
+async def wiki_open_callback(callback: CallbackQuery):
+    await wiki_open(callback)
 
 @start_callback_router.callback_query(F.data == "wiki_add_page")
 async def wiki_add_page_callback(callback: CallbackQuery, state: FSMContext):
