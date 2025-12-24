@@ -14,14 +14,14 @@ from utils.permissions import ensure_admin
 
 async def wiki_open(context: Union[Message, CallbackQuery]):
     await context.answer()
-    await context.message.answer("Меню управления статьями:", reply_markup=wiki_open_kb(context.from_user.id))
+    await context.message.edit_text("Меню действий со статьями:", reply_markup=wiki_open_kb(context.from_user.id))
 
 
 async def wiki_add_page(context: Union[Message, CallbackQuery], state: FSMContext):
     if not await ensure_admin(context): return
 
     await context.answer()
-    await context.message.answer("✒️ Отправьте название статьи", reply_markup=cancel_kb())
+    await context.message.edit_text("✒️ Отправьте название статьи", reply_markup=cancel_kb())
 
     await state.set_state(WikiStates.waiting_for_title)
     await state.update_data(title="", content="")
@@ -34,8 +34,7 @@ async def wiki_add_page_title_got(context: Union[Message, CallbackQuery], state:
 
     title = context.text
 
-    await context.answer(f'📄 Выбранное название: "{title}"')
-    await context.answer("✒️ Отправьте содержимое статьи", reply_markup=cancel_kb())
+    await context.edit_text(f'📄 Выбранное название: "{title}"\n\n✒️ Отправьте содержимое статьи', reply_markup=cancel_kb())
 
     await state.set_state(WikiStates.waiting_for_content)
     await state.update_data(title=title)
@@ -49,8 +48,7 @@ async def wiki_add_page_content_got(context: Union[Message, CallbackQuery], stat
     content = context.text
     await state.set_state(WikiStates.waiting_for_approval)
     await state.update_data(content=content)
-    await context.answer(f'📖 "{title}"\n\n{content}')
-    await context.answer("Добавить статью в базу?", reply_markup=wiki_approval_kb())
+    await context.edit_text(f'📖 "{title}"\n\n{content}Добавить статью в базу?', reply_markup=wiki_approval_kb())
 
 
 async def wiki_add_page_approve(context: Union[Message, CallbackQuery], state: FSMContext, approved: bool):
@@ -65,7 +63,7 @@ async def wiki_add_page_approve(context: Union[Message, CallbackQuery], state: F
     await context.answer()
     await state.clear()
     text = "✅ Статья добавлена" if approved else "❌ Статья отклонена"
-    await context.message.answer(text, reply_markup=home_kb())
+    await context.message.edit_text(text, reply_markup=home_kb())
 
 
 async def wiki_show(context: Union[Message, CallbackQuery], state: FSMContext):
@@ -74,10 +72,10 @@ async def wiki_show(context: Union[Message, CallbackQuery], state: FSMContext):
 
     pages = await db.get_all_pages()
     if len(pages) == 0:
-        await context.message.answer("❌ База пуста!", reply_markup=wiki_show_empty_db_kb())
+        await context.message.edit_text("❌ База пуста!", reply_markup=wiki_show_empty_db_kb())
         return
 
-    await context.message.answer("📃 Сохраненные статьи:", reply_markup=wiki_show_kb(pages))
+    await context.message.edit_text("📃 Сохраненные статьи:", reply_markup=wiki_show_kb(pages))
 
 
 async def wiki_show_page(context: Union[Message, CallbackQuery], state: FSMContext, page_id: int):
@@ -92,7 +90,7 @@ async def wiki_show_page(context: Union[Message, CallbackQuery], state: FSMConte
     await context.answer()
     await state.set_state(WikiStates.waiting_for_action_with_page)
     await state.update_data(page_id=page_id)
-    await context.message.answer(text=text, reply_markup=wiki_show_page_kb())
+    await context.message.edit_text(text=text, reply_markup=wiki_show_page_kb())
 
 
 async def wiki_remove_page(context: Union[Message, CallbackQuery], state: FSMContext):
@@ -105,5 +103,5 @@ async def wiki_remove_page(context: Union[Message, CallbackQuery], state: FSMCon
     await db.delete_page(page_id)
 
     await context.answer()
-    await context.message.answer("❌ Статья удалена!")
+    await context.message.edit_text("❌ Статья удалена!")
     await wiki_show(context, state)
