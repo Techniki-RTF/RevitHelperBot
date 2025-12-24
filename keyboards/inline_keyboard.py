@@ -67,7 +67,7 @@ async def wiki_show_empty_db_kb():
 async def wiki_show_page_kb():
     inline_kb_list = [
         [InlineKeyboardButton(text="⬅️ Назад к списку", callback_data="wiki_show")],
-        [InlineKeyboardButton(text="❌️ Удалить", callback_data="wiki_remove_page")],
+        [InlineKeyboardButton(text="🗑️ Удалить", callback_data="wiki_remove_page")],
         [InlineKeyboardButton(text="🏠 Главное меню", callback_data="home")]
     ]
     return InlineKeyboardMarkup(inline_keyboard=inline_kb_list)
