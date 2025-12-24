@@ -11,14 +11,15 @@ async def show_main_menu(context: Union[Message, CallbackQuery]):
     text = f"Привет, {context.from_user.full_name}!\nМеню:"
     if isinstance(context, CallbackQuery):
         await context.answer()
-        await context.message.answer(text, reply_markup=await main_menu_kb())
+        await context.message.answer(text, reply_markup=main_menu_kb())
         return
     await context.answer(text, reply_markup=await main_menu_kb())
+    await context.answer(text, reply_markup=main_menu_kb())
 
 async def show_about(context: Union[Message, CallbackQuery]):
     text = "Разработчики:\nt.me/renamq\nt.me/Blueberry_Roulette\n\nКоманда: Techniki"
     if isinstance(context, CallbackQuery):
         await context.answer()
-        await context.message.answer(text, reply_markup=await home_kb())
+        await context.message.answer(text, reply_markup=home_kb())
         return
     await context.answer(text, reply_markup=await home_kb())

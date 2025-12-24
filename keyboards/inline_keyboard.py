@@ -3,10 +3,7 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 from create_bot import admins
 
-
-# TODO: why async?
-
-async def main_menu_kb():
+def main_menu_kb():
     inline_kb_list = [
         [InlineKeyboardButton(text="🔎 Начать консультацию", callback_data="start_consult")],
         [InlineKeyboardButton(text="📃 База знаний", callback_data="wiki_open")],
@@ -15,7 +12,7 @@ async def main_menu_kb():
     return InlineKeyboardMarkup(inline_keyboard=inline_kb_list)
 
 
-async def consult_step_kb():
+def consult_step_kb():
     inline_kb_list = [
         [
             InlineKeyboardButton(text="✅ Сделано", callback_data="consult_done"),
@@ -26,7 +23,7 @@ async def consult_step_kb():
     return InlineKeyboardMarkup(inline_keyboard=inline_kb_list)
 
 
-async def wiki_open_kb(user_id: int):
+def wiki_open_kb(user_id: int):
     inline_kb_list = [
         [InlineKeyboardButton(text="👀️ Посмотреть добавленные статьи", callback_data="wiki_show")],
         [InlineKeyboardButton(text="🏠 В главное меню", callback_data="home")],
@@ -37,7 +34,7 @@ async def wiki_open_kb(user_id: int):
     return InlineKeyboardMarkup(inline_keyboard=inline_kb_list)
 
 
-async def wiki_approval_kb():
+def wiki_approval_kb():
     inline_kb_list = [
         [InlineKeyboardButton(text="✅ Добавить", callback_data="wiki_add_page_approve")],
         [InlineKeyboardButton(text="❌ Отменить", callback_data="wiki_add_page_decline")],
@@ -45,7 +42,7 @@ async def wiki_approval_kb():
     return InlineKeyboardMarkup(inline_keyboard=inline_kb_list)
 
 
-async def wiki_show_kb(pages: list[dict[str, any]]):
+def wiki_show_kb(pages: list[dict[str, any]]):
     builder = InlineKeyboardBuilder()
 
     for page in pages:
@@ -56,7 +53,7 @@ async def wiki_show_kb(pages: list[dict[str, any]]):
     return builder.as_markup()
 
 
-async def wiki_show_empty_db_kb():
+def wiki_show_empty_db_kb():
     inline_kb_list = [
         [InlineKeyboardButton(text="⬅️ Назад", callback_data="wiki_open")],
         [InlineKeyboardButton(text="🏠 Главное меню", callback_data="home")]
@@ -64,7 +61,7 @@ async def wiki_show_empty_db_kb():
     return InlineKeyboardMarkup(inline_keyboard=inline_kb_list)
 
 
-async def wiki_show_page_kb():
+def wiki_show_page_kb():
     inline_kb_list = [
         [InlineKeyboardButton(text="⬅️ Назад к списку", callback_data="wiki_show")],
         [InlineKeyboardButton(text="🗑️ Удалить", callback_data="wiki_remove_page")],
@@ -73,11 +70,11 @@ async def wiki_show_page_kb():
     return InlineKeyboardMarkup(inline_keyboard=inline_kb_list)
 
 
-async def home_kb():
+def home_kb():
     inline_kb_list = [[InlineKeyboardButton(text="🏠 Главное меню", callback_data="home")]]
     return InlineKeyboardMarkup(inline_keyboard=inline_kb_list)
 
 
-async def back_kb(callback: str):
+def back_kb(callback: str):
     inline_kb_list = [[InlineKeyboardButton(text="⬅️ Назад", callback_data=f"{callback}")]]
     return InlineKeyboardMarkup(inline_keyboard=inline_kb_list)

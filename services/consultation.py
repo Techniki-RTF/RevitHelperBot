@@ -21,9 +21,9 @@ async def show_consultation_step(context: Union[Message, CallbackQuery], state: 
     text = format_step(step)
     if isinstance(context, CallbackQuery):
         await context.answer()
-        await context.message.answer(text, reply_markup=await consult_step_kb())
+        await context.message.answer(text, reply_markup=consult_step_kb())
         return
-    await context.answer(text, reply_markup=await consult_step_kb())
+    await context.answer(text, reply_markup=consult_step_kb())
 
 async def handle_consultation_action(context: CallbackQuery, state: FSMContext, action: str):
     data = await state.get_data()
@@ -47,6 +47,6 @@ async def show_consultation_summary(context: Union[Message, CallbackQuery], stat
     await state.clear()
     if isinstance(context, CallbackQuery):
         await context.answer()
-        await context.message.answer(text, reply_markup=await home_kb())
+        await context.message.answer(text, reply_markup=home_kb())
         return
-    await context.answer(text, reply_markup=await home_kb())
+    await context.answer(text, reply_markup=home_kb())
