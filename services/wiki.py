@@ -34,7 +34,7 @@ async def wiki_add_page_title_got(context: Union[Message, CallbackQuery], state:
 
     title = context.text
 
-    await context.edit_text(f'📄 Выбранное название: "{title}"\n\n✒️ Отправьте содержимое статьи', reply_markup=cancel_kb())
+    await context.answer(f'📄 Выбранное название: "{title}"\n\n✒️ Отправьте содержимое статьи', reply_markup=cancel_kb())
 
     await state.set_state(WikiStates.waiting_for_content)
     await state.update_data(title=title)
@@ -48,7 +48,7 @@ async def wiki_add_page_content_got(context: Union[Message, CallbackQuery], stat
     content = context.text
     await state.set_state(WikiStates.waiting_for_approval)
     await state.update_data(content=content)
-    await context.edit_text(f'📖 "{title}"\n\n{content}Добавить статью в базу?', reply_markup=wiki_approval_kb())
+    await context.answer(f'📖 "{title}"\n\n{content}Добавить статью в базу?', reply_markup=wiki_approval_kb())
 
 
 async def wiki_add_page_approve(context: Union[Message, CallbackQuery], state: FSMContext, approved: bool):
