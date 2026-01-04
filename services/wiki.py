@@ -8,7 +8,7 @@ from states import WikiStates
 
 from create_bot import db
 from utils.permissions import ensure_admin
-
+from utils.tables import render_content_with_tables
 
 # TODO: use certain types instead of Union[Message, CallbackQuery] to reduce code implicity (?)
 
@@ -48,13 +48,15 @@ async def wiki_add_page_content_got(context: Union[Message, CallbackQuery], stat
     content = context.text
     await state.set_state(WikiStates.waiting_for_approval)
     await state.update_data(content=content)
-    await context.answer(f'📖 "{title}"\n\n{content}Добавить статью в базу?', reply_markup=wiki_approval_kb())
+    rendered = render_content_with_tables(content or "")
+    await context.answer(f'📖 \"{title}\"\n\n{rendered}\n\n\nДобавить статью в базу?', reply_markup=wiki_approval_kb())
 
 
 async def wiki_add_page_approve(context: Union[Message, CallbackQuery], state: FSMContext, approved: bool):
     if not await ensure_admin(context): return
     data = await state.get_data()
-    title, content = (data["title"], data["content"])
+    title = data.get("title")
+    content = data.get("content")
 
     if approved:
         # TODO: get the result (e.g updated, created, ..); error handling
@@ -86,6 +88,7 @@ async def wiki_show_page(context: Union[Message, CallbackQuery], state: FSMConte
         pass
 
     title, content = (page["title"], page["content"])
+    content = render_content_with_tables(content or "")
     text = f'📖 "{title}"\n\n{content}'
 
     await context.answer()
