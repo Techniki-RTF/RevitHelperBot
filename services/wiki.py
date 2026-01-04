@@ -81,7 +81,8 @@ async def wiki_show(context: Union[Message, CallbackQuery], state: FSMContext):
 async def wiki_show_page(context: Union[Message, CallbackQuery], state: FSMContext, page_id: int):
     page = await db.get_page_by_id(page_id)
     if not page:
-        # TODO: implement
+        await context.answer()
+        await context.message.edit_text("Ошибка!\n\nСтатья не найдена!", reply_markup=wiki_show_empty_db_kb())
         pass
 
     title, content = (page["title"], page["content"])
